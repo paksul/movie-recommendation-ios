@@ -26,13 +26,24 @@ class Movies : ObservableObject{
          self.genre = genre
          }
     }
-    
+    init() {
+        movies.append(Movie(id: 1, name: "The Grand Budapest Hotel", year: "(2014)", genre: "Adventure, Comedy, Crime"))
+        movies.append(Movie(id: 2, name: "Moonrise Kingdom", year: "(2012)", genre: "Comedy, Drama, Romance"))
+        movies.append(Movie(id: 3, name: "Isle Of Dogs", year: "(2018)", genre: "Animation, Adventure, Comedy"))
+        movies.append(Movie(id: 4, name: "The Darjeeling Limited", year: "(2007)", genre: "Adventure, Comedy, Drama"))
+        movies.append(Movie(id: 5, name: "The Royal Tenenbaums", year: "(2001)", genre: "Comedy, Drama"))
+        movies.append(Movie(id: 6, name: "The Life Aquatic with Steve Zissou", year: "(2004)", genre: "Action, Adventure, Comedy"))
+        movies.append(Movie(id: 7, name: "Rushmore", year: "(1998)", genre: "Comedy, Drama, Romance"))
+        movies.append(Movie(id: 8, name: "Fantastic Mr. Fox", year: "(2009)", genre: "Animation, Adventure, Comedy"))
+        movies.append(Movie(id: 9, name: "Bottle Rocket", year: "(1996)", genre: "Comedy, Crime, Drama"))
+        movies.append(Movie(id: 10, name: "The French Dispatch", year: "(2021)", genre: "Comedy, Drama, Romance"))
+        
+        currentMovie = movies.randomElement()
+    }
     func rateCurrentMovie(rating: Int) {
         if let movieToBeRated = currentMovie {
             ratings[movieToBeRated] = rating
             currentMovie = movies.randomElement()
-            
-            
         }
     }
     
