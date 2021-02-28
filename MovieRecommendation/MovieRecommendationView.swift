@@ -8,45 +8,49 @@
 import SwiftUI
 
 struct MovieRecommendationView: View {
-    @ObservedObject var viewModel: Movies
-    @State private var recommendedMovies: [Int64]?
+    //@ObservedObject var viewModel: Movies
+    @ObservedObject var recommendationViewModel: RecommendationViewModel
+    @State private var recommendedMovies: [Movie]?
     @State private var currentImage: UIImage?
     
     var body: some View {
         VStack {
             Image(uiImage: currentImage ?? UIImage())
             
-            let movieName = viewModel.currentMovie?.name
+            let movieName = recommendationViewModel.currentMovie?.name
             Text(movieName ?? "")
+                .onAppear(perform: getMovieData)
+                .onChange(of: movieName) { _ in
+                    getMovieData()
+                }
             HStack {
                 Text("☆").onTapGesture{
-                    viewModel.rateCurrentMovie(rating: 1)
-                    
+                    recommendationViewModel.rateCurrentMovie(rating: 1)
                 }
                 Text("☆").onTapGesture{
-                    viewModel.rateCurrentMovie(rating: 2)
+                    recommendationViewModel.rateCurrentMovie(rating: 2)
                 }
                 Text("☆").onTapGesture{
-                    viewModel.rateCurrentMovie(rating: 3)
+                    recommendationViewModel.rateCurrentMovie(rating: 3)
                 }
                 Text("☆").onTapGesture{
-                    viewModel.rateCurrentMovie(rating: 4)
+                    recommendationViewModel.rateCurrentMovie(rating: 4)
                 }
                 Text("☆").onTapGesture{
-                    viewModel.rateCurrentMovie(rating: 5)
+                    recommendationViewModel.rateCurrentMovie(rating: 5)
                 }
             }
             .padding()
             
             Button(action: {
-                viewModel.currentMovie = viewModel.movies.randomElement()
+                recommendationViewModel.nextMovie()
             }, label: {
                 Text("Haven't watch this movie")
             })
             .padding()
             
             Button(action: {
-                recommendedMovies = viewModel.getRecommendation()
+                recommendedMovies = recommendationViewModel.recommendMovies()
             }, label: {
                 Text("Recommend")
             })
@@ -60,52 +64,23 @@ struct MovieRecommendationView: View {
                 Text("Movie data")
             })
             .padding()
-        }.onAppear(perform: {
-            loadMovieData()
-        })
+        }
     }
     
     func getRecommendedMovieName() -> String {
         if let firstMovieId = recommendedMovies?.first {
-            return viewModel.getMovieName(movieId: Int(firstMovieId))
+            return firstMovieId.name
         }
         return ""
     }
     
-    func loadMovieData() {
-        if let moviesURL = Bundle.main.url(forResource: "movies", withExtension: ".csv") {
-            if let moviesString = try?
-                String(contentsOf: moviesURL) {
-                let movies = moviesString.components(separatedBy: "\n")
-                
-                let movieList = createMovieList(movies: movies)
-                
-                viewModel.addMovies(movieList)
-            }
-        }
-    }
-    
-    func createMovieList(movies: [String]) -> [Movies.Movie] {
-        var movieList: [Movies.Movie] = []
-        
-        for movieString in movies {
-            let movieAttributes = movieString.components(separatedBy: ",")
-            if let movieId = Int(movieAttributes[0]) {
-                let movie = Movies.Movie(id: movieId,
-                                         name: movieAttributes[1],
-                                         year: "",
-                                         genre: movieAttributes[2])
-                
-                movieList.append(movie)
-            }
-        }
-        return movieList
-    }
-    
     func getMovieData() {
         let session = URLSession.shared
-        //let title = viewModel.currentMovie?.name
-        let url = URL(string: "https://www.omdbapi.com/?apikey=60fdfa58&s=Titanic")!
+        let movieName = recommendationViewModel.currentMovie?.name
+        let urlEncodedName = movieName?.replacingOccurrences(of: " ", with: "%20") ?? ""
+        
+        print(urlEncodedName)
+        let url = URL(string: "https://www.omdbapi.com/?apikey=60fdfa58&t=\(urlEncodedName)")!
         
         let task = session.dataTask(with: url) {data, response, error in
             guard let response = response as? HTTPURLResponse, (200...299).contains(response.statusCode) else {
@@ -150,6 +125,19 @@ struct MovieRecommendationView: View {
         task.resume()
     }
     
+    func regexTest() {
+        let regexPattern = "\\(([0-9]){4}\\)"
+        var testString = "Grand Budapepest Hotel (2014)"
+
+        let range = testString.range(of: regexPattern, options: .regularExpression)
+
+        print(testString[range!])
+        
+        testString.removeSubrange(range!)
+        
+        print(testString)
+    }
+    
 }
 
 
@@ -166,6 +154,6 @@ struct MovieRecommendationView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        MovieRecommendationView(viewModel: Movies())
+        MovieRecommendationView(recommendationViewModel: RecommendationViewModel())
     }
 }

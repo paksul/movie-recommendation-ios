@@ -12,6 +12,9 @@
 		771440902565654B00673DC2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7714408F2565654B00673DC2 /* Assets.xcassets */; };
 		771440932565654B00673DC2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 771440922565654B00673DC2 /* Preview Assets.xcassets */; };
 		7714409C256566C900673DC2 /* Movies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7714409B256566C900673DC2 /* Movies.swift */; };
+		7722EEC025EA791400796C4D /* MovieDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7722EEBF25EA791400796C4D /* MovieDataLoader.swift */; };
+		7722EEC325EA897C00796C4D /* RecommendationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7722EEC225EA897C00796C4D /* RecommendationModel.swift */; };
+		7722EEC625EA95E300796C4D /* RecommendationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7722EEC525EA95E300796C4D /* RecommendationViewModel.swift */; };
 		77A32E6E25D964E5008A2B33 /* movies.csv in Resources */ = {isa = PBXBuildFile; fileRef = 77A32E6D25D964E5008A2B33 /* movies.csv */; };
 		77A32E7925DAC953008A2B33 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A32E7825DAC953008A2B33 /* MainView.swift */; };
 		77A32E7C25DE97DE008A2B33 /* RateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A32E7B25DE97DE008A2B33 /* RateView.swift */; };
@@ -26,6 +29,9 @@
 		771440922565654B00673DC2 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		771440942565654B00673DC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7714409B256566C900673DC2 /* Movies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movies.swift; sourceTree = "<group>"; };
+		7722EEBF25EA791400796C4D /* MovieDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDataLoader.swift; sourceTree = "<group>"; };
+		7722EEC225EA897C00796C4D /* RecommendationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationModel.swift; sourceTree = "<group>"; };
+		7722EEC525EA95E300796C4D /* RecommendationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationViewModel.swift; sourceTree = "<group>"; };
 		77A32E6D25D964E5008A2B33 /* movies.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = movies.csv; sourceTree = "<group>"; };
 		77A32E7825DAC953008A2B33 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		77A32E7B25DE97DE008A2B33 /* RateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateView.swift; sourceTree = "<group>"; };
@@ -64,7 +70,10 @@
 			children = (
 				7714408B2565654900673DC2 /* MovieRecommendationApp.swift */,
 				7714408D2565654900673DC2 /* MovieRecommendationView.swift */,
+				7722EEBF25EA791400796C4D /* MovieDataLoader.swift */,
 				77A32E7825DAC953008A2B33 /* MainView.swift */,
+				7722EEC525EA95E300796C4D /* RecommendationViewModel.swift */,
+				7722EEC225EA897C00796C4D /* RecommendationModel.swift */,
 				77A32E7B25DE97DE008A2B33 /* RateView.swift */,
 				7714409B256566C900673DC2 /* Movies.swift */,
 				77B6B4C125D5B5AB00792823 /* MovieRecommenderModel.mlmodel */,
@@ -156,6 +165,9 @@
 			files = (
 				7714408E2565654900673DC2 /* MovieRecommendationView.swift in Sources */,
 				7714408C2565654900673DC2 /* MovieRecommendationApp.swift in Sources */,
+				7722EEC325EA897C00796C4D /* RecommendationModel.swift in Sources */,
+				7722EEC025EA791400796C4D /* MovieDataLoader.swift in Sources */,
+				7722EEC625EA95E300796C4D /* RecommendationViewModel.swift in Sources */,
 				77A32E7C25DE97DE008A2B33 /* RateView.swift in Sources */,
 				7714409C256566C900673DC2 /* Movies.swift in Sources */,
 				77A32E7925DAC953008A2B33 /* MainView.swift in Sources */,

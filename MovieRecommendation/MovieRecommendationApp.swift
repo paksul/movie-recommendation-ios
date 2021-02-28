@@ -12,7 +12,7 @@ struct MovieRecommendationApp: App {
     var body: some Scene {
         WindowGroup {
             //MainView()
-            MovieRecommendationView(viewModel: Movies())
+            MovieRecommendationView(recommendationViewModel: RecommendationViewModel())
         }
     }
 }
