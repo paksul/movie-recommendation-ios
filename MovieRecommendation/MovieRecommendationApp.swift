@@ -11,8 +11,8 @@ import SwiftUI
 struct MovieRecommendationApp: App {
     var body: some Scene {
         WindowGroup {
-            //MainView()
-            MovieRecommendationView(recommendationViewModel: RecommendationViewModel())
+            MainView()
+            //MovieRecommendationView(recommendationViewModel: RecommendationViewModel())
         }
     }
 }

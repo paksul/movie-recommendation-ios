@@ -10,29 +10,36 @@ import Foundation
 struct MovieDataLoader {
     
     func loadMovies() -> [Movie] {
-        if let moviesURL = Bundle.main.url(forResource: "movies", withExtension: ".csv") {
-            if let moviesString = try?
-                String(contentsOf: moviesURL) {
-                
-                let movies = moviesString.components(separatedBy: "\n")
-                
-                return createMovies(from: movies)
-            }
+        if let movieData = loadFile(from: "movies", withExtension: ".csv"),
+           let linksData = loadFile(from: "links", withExtension: ".csv"){
+            let movies = movieData.components(separatedBy: "\n")
+            let links = linksData.components(separatedBy: "\n")
+            
+            return createMovies(from: movies, withLinks: links)
         }
         return [Movie]()
     }
     
-    private func createMovies(from movies: [String]) -> [Movie] {
+    private func loadFile(from filePath: String, withExtension fileExtension: String) -> String? {
+        if let fileUrl = Bundle.main.url(forResource: filePath, withExtension: fileExtension) {
+            return try? String(contentsOf: fileUrl)
+        }
+        return nil
+    }
+    
+    private func createMovies(from movies: [String], withLinks links: [String]) -> [Movie] {
         var movieList: [Movie] = []
         
-        for movieString in movies {
+        for (index, movieString) in movies.enumerated() {
             let movieAttributes = movieString.components(separatedBy: ",")
-            
+            let linkAttributes = links[index].components(separatedBy: ",")
+             
             if let movieId = Int(movieAttributes[0]) {
                 let year = extractYear(from: movieAttributes[1])
                 let name = extractNameWithoutYear(movieName: movieAttributes[1])
-                
+                                                
                 let movie = Movie(id: movieId,
+                                  imdbId: linkAttributes[1],
                                   name: name,
                                   year: year,
                                   genres: [movieAttributes[2]])

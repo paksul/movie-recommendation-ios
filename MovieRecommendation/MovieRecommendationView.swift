@@ -8,21 +8,16 @@
 import SwiftUI
 
 struct MovieRecommendationView: View {
-    //@ObservedObject var viewModel: Movies
     @ObservedObject var recommendationViewModel: RecommendationViewModel
     @State private var recommendedMovies: [Movie]?
     @State private var currentImage: UIImage?
     
     var body: some View {
         VStack {
-            Image(uiImage: currentImage ?? UIImage())
+            Image(uiImage: recommendationViewModel.backgroundImage ?? UIImage())
             
             let movieName = recommendationViewModel.currentMovie?.name
             Text(movieName ?? "")
-                .onAppear(perform: getMovieData)
-                .onChange(of: movieName) { _ in
-                    getMovieData()
-                }
             HStack {
                 Text("☆").onTapGesture{
                     recommendationViewModel.rateCurrentMovie(rating: 1)
@@ -76,11 +71,10 @@ struct MovieRecommendationView: View {
     
     func getMovieData() {
         let session = URLSession.shared
-        let movieName = recommendationViewModel.currentMovie?.name
-        let urlEncodedName = movieName?.replacingOccurrences(of: " ", with: "%20") ?? ""
+        let imdbId = recommendationViewModel.currentMovie?.imdbId
         
-        print(urlEncodedName)
-        let url = URL(string: "https://www.omdbapi.com/?apikey=60fdfa58&t=\(urlEncodedName)")!
+        let url = URL(string: "https://www.omdbapi.com/?apikey=60fdfa58&i=tt\(imdbId!)")!
+        print(url.description)
         
         let task = session.dataTask(with: url) {data, response, error in
             guard let response = response as? HTTPURLResponse, (200...299).contains(response.statusCode) else {
@@ -123,19 +117,6 @@ struct MovieRecommendationView: View {
         }
         
         task.resume()
-    }
-    
-    func regexTest() {
-        let regexPattern = "\\(([0-9]){4}\\)"
-        var testString = "Grand Budapepest Hotel (2014)"
-
-        let range = testString.range(of: regexPattern, options: .regularExpression)
-
-        print(testString[range!])
-        
-        testString.removeSubrange(range!)
-        
-        print(testString)
     }
     
 }

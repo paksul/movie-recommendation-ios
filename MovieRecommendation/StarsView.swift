@@ -7,19 +7,22 @@
 
 import SwiftUI
 
-struct RateView: View {
-    var rating: CGFloat
+struct StarsView: View {
+    @State var rating: CGFloat
     var maxRating: Int
     
     
     var body: some View {
-       
-                let stars = HStack(spacing: 0) {
-            ForEach(0..<maxRating) { _ in
+        
+        let stars = HStack(spacing: 0) {
+            ForEach(0..<maxRating) { index in
                 Image(systemName: "star.fill")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .padding(7)
+                    .onTapGesture {
+                        rating = CGFloat(index + 1)
+                    }
             }
         }
         
@@ -47,6 +50,6 @@ struct RateView: View {
 
 struct RateView_Previews: PreviewProvider {
     static var previews: some View {
-        RateView(rating: 2.5, maxRating: 5)
+        StarsView(rating: 2.5, maxRating: 5)
     }
 }

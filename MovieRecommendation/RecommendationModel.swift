@@ -39,8 +39,9 @@ struct RecommendationModel {
     
 }
 
-struct Movie: Identifiable, Hashable {
+struct Movie: Identifiable, Hashable, Codable {
     var id: Int
+    var imdbId: String
     var name: String
     var year: Int
     var genres: [String]

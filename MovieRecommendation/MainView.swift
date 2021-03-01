@@ -12,7 +12,7 @@ struct MainView: View {
         NavigationView{
             VStack {
                 NavigationLink(
-                    destination: RateView(rating: 2.5, maxRating: 5),
+                    destination: RatingView(recommendationViewModel: RecommendationViewModel(), rating: 0, maxRating: 5),
                     label: {
                         Text("Rate movies")
                             .fontWeight(.semibold)
