@@ -8,48 +8,47 @@
 import SwiftUI
 
 struct StarsView: View {
-    @State var rating: CGFloat
-    var maxRating: Int
     
+    var recommendationViewModel: RecommendationViewModel
+    @Binding var rating: Int?
+    var max: Int = 5
     
     var body: some View {
-        
-        let stars = HStack(spacing: 0) {
-            ForEach(0..<maxRating) { index in
-                Image(systemName: "star.fill")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .padding(7)
-                    .onTapGesture {
-                        rating = CGFloat(index + 1)
-                    }
-            }
-        }
-        
-        stars.overlay(
-            GeometryReader { g in
-                let width = rating / CGFloat(maxRating) * g.size.width
-                ZStack(alignment: .leading) {
-                    Rectangle()
-                        .frame(width: width)
+            HStack {
+                ForEach(1..<(max + 1), id: \.self) { index in
+                    Image(systemName: self.starType(index: index))
                         .foregroundColor(Color(.sRGB, red: 150/225, green: 121/225, blue: 175/225))
+                        .aspectRatio(contentMode: .fit)
+                        .padding(7)
+                        .onTapGesture {
+                            self.rating = index
+                            self.recommendationViewModel.rateCurrentMovie(rating: index)
+                    }
                 }
             }
-            .mask(stars)
-        )
-        .foregroundColor(.gray)
-        .padding()
+        }
+
+        private func starType(index: Int) -> String {
+            
+            if let rating = self.rating {
+                return index <= rating ? "star.fill" : "star"
+            } else {
+                return "star"
+            }
+            
+        }
+        
     }
-}
-
-
-
-
-
-
-
-struct RateView_Previews: PreviewProvider {
-    static var previews: some View {
-        StarsView(rating: 2.5, maxRating: 5)
+    
+    
+    
+    
+    
+    
+    
+    
+    struct RateView_Previews: PreviewProvider {
+        static var previews: some View {
+            StarsView(recommendationViewModel: RecommendationViewModel(), rating: Binding.constant(0), max: 5)
+        }
     }
-}

@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct MainView: View {
+    var recommendationViewModel: RecommendationViewModel
+    
     var body: some View {
         NavigationView{
             VStack {
                 NavigationLink(
-                    destination: RatingView(recommendationViewModel: RecommendationViewModel(), rating: 0, maxRating: 5),
+                    destination: RatingView(recommendationViewModel: recommendationViewModel, rating: 0, maxRating: 5).scaledToFit(),
                     label: {
                         Text("Rate movies")
                             .fontWeight(.semibold)
@@ -26,7 +28,7 @@ struct MainView: View {
                 
                 
                 NavigationLink(
-                    destination: Text("Recommend view"),
+                    destination: RecommendationView(recommendationViewModel: recommendationViewModel, recommendedMovies: [Movie]()).scaledToFit(),
                     label: {
                         Text("Recommend me movie")
                             .fontWeight(.semibold)
@@ -45,6 +47,6 @@ struct MainView: View {
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView()
+        MainView(recommendationViewModel: RecommendationViewModel())
     }
 }

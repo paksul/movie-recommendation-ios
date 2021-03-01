@@ -9,49 +9,38 @@ import SwiftUI
 
 struct RatingView: View {
     @ObservedObject var recommendationViewModel: RecommendationViewModel
-    @State var rating: CGFloat
+    @State var rating: Int?
     var maxRating: Int
     
     var body: some View {
         VStack {
+            Text(recommendationViewModel.currentMovie?.name ?? "").font(.title2)
             Image(uiImage: recommendationViewModel.backgroundImage ?? UIImage())
-            Text(recommendationViewModel.currentMovie?.name ?? "")
+                .resizable()
+                .onChange(of: recommendationViewModel.backgroundImage) { newImage in
+                    self.rating = 0
+                }
+            StarsView(recommendationViewModel: recommendationViewModel, rating: $rating, max: 5)
             Button(action: {
                 recommendationViewModel.nextMovie()
+                self.rating = 0
             }, label: {
-                Text("Haven't watch this movie")
+                Text("Didn't watch this movie")
+                    .font(.title2)
             })
+            .frame(minWidth: 0, maxWidth: .infinity)
             .padding()
+            .foregroundColor(.white)
+            .background(Color(.sRGB, red: 150/225, green: 121/225, blue: 175/225))
+            .cornerRadius(30)
+            .aspectRatio(contentMode: .fit)
         }
-        
-        let stars = HStack(spacing: 0) {
-            ForEach(0..<maxRating) { index in
-                Image(systemName: "star.fill")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .padding(7)
-                    .onTapGesture {
-                        rating = CGFloat(index + 1)
-                    }
-            }
-        }
-        
-        stars.overlay(
-            GeometryReader { g in
-                let width = rating / CGFloat(maxRating) * g.size.width
-                ZStack(alignment: .leading) {
-                    Rectangle()
-                        .frame(width: width)
-                        .foregroundColor(Color(.sRGB, red: 150/225, green: 121/225, blue: 175/225))
-                }
-            }
-            .mask(stars)
-        )
-        .foregroundColor(.gray)
+        .scaledToFit()
         .padding()
+        
     }
 }
-   
+
 
 
 
@@ -67,6 +56,7 @@ struct RatingView: View {
 
 struct RatingView_Previews: PreviewProvider {
     static var previews: some View {
-        RatingView(recommendationViewModel: RecommendationViewModel(), rating: 2.5, maxRating: 5)
+        RatingView(recommendationViewModel: RecommendationViewModel(), rating: 0, maxRating: 5)
     }
 }
+

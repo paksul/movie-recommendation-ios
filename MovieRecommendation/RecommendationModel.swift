@@ -21,6 +21,7 @@ struct RecommendationModel {
     
     mutating func rate(movie: Movie, rating: Double) {
         ratings[Int64(movie.id)] = rating
+        print(ratings)
     }
     
     func ratingFor(movie: Movie) -> Double? {
@@ -29,6 +30,8 @@ struct RecommendationModel {
     
     func recommendMovies(numberOfItems: Int) -> [Movie] {
         let recommenderInput = MovieRecommenderModelInput(items: ratings, k: Int64(numberOfItems))
+        
+        print(ratings)
         
         let output = try? recommenderEngine.prediction(input: recommenderInput)
         

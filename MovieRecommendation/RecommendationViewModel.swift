@@ -11,7 +11,15 @@ import Combine
 class RecommendationViewModel: ObservableObject {
     var recommendationModel: RecommendationModel
     
-    @Published private(set) var currentMovie: Movie? {
+    @Published var currentMovie: Movie? {
+        didSet {
+            if currentMovie?.imdbId != nil {
+                getMovieData()
+            }
+        }
+    }
+    
+    @Published var recommendedMovie: Movie? {
         didSet {
             if currentMovie?.imdbId != nil {
                 getMovieData()
@@ -20,6 +28,7 @@ class RecommendationViewModel: ObservableObject {
     }
     
     @Published private(set) var backgroundImage: UIImage?
+    @Published private(set) var recommendedMovieImage: UIImage?
     
     init() {
         recommendationModel = RecommendationModel(ratings: [:], movies: MovieDataLoader().loadMovies())
@@ -29,7 +38,6 @@ class RecommendationViewModel: ObservableObject {
     
     func nextMovie() {
         currentMovie = recommendationModel.movies.randomElement()
-        
     }
     
     func rateCurrentMovie(rating: Int) {
@@ -46,10 +54,11 @@ class RecommendationViewModel: ObservableObject {
     }
     
     func getMovieData() {
+        backgroundImage = nil
         let session = URLSession.shared
         let imdbId = currentMovie?.imdbId
         
-        print(imdbId)
+        //print(imdbId)
         let url = URL(string: "https://www.omdbapi.com/?apikey=60fdfa58&i=tt\(imdbId!)")!
         print(url.description)
         
@@ -65,15 +74,15 @@ class RecommendationViewModel: ObservableObject {
             }
             
             do {
-                let json = try JSONSerialization.jsonObject(with: data!, options: [])
-                if let movieData = json as? [String: Any],
-                   let posterLink = movieData["Poster"] as? String {
-                    let posterUrl = URL(string: posterLink)
-                    self.getMoviePoster(with: posterUrl!)
+                DispatchQueue.main.async {
+                    let json = try? JSONSerialization.jsonObject(with: data!, options: [])
+                    if let movieData = json as? [String: Any],
+                       let posterLink = movieData["Poster"] as? String {
+                        let posterUrl = URL(string: posterLink)
+                        self.getMoviePoster(with: posterUrl!)
+                    }
+                    //print(json)
                 }
-                print(json)
-            } catch {
-                print("JSON error: \(error.localizedDescription)")
             }
         }
         
@@ -89,7 +98,9 @@ class RecommendationViewModel: ObservableObject {
                 return
             }
             
-            self.backgroundImage = UIImage(data: data!)
+            DispatchQueue.main.async {
+                self.backgroundImage = UIImage(data: data!)
+            }
             
         }
         
