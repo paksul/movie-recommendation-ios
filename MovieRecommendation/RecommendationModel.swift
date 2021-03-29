@@ -9,27 +9,35 @@ import Foundation
 import CoreML
 
 struct RecommendationModel {
-    var ratings: [Int64: Double]
+        
+    var ratings: [String: Double] {
+        didSet {
+            UserDefaults.standard.set(ratings, forKey: "ratings")
+        }
+    }
+    
     var movies: [Movie]
     var recommenderEngine: MovieRecommenderModel
     
     init(ratings: [Int64: Double], movies: [Movie]) {
-        self.ratings = ratings
+        self.ratings = UserDefaults.standard.dictionary(forKey: "ratings") as? [String: Double] ?? [String: Double]()
+        print("Loaded ratings from UserDefaults: \(self.ratings)")
         self.movies = movies
         self.recommenderEngine = try! MovieRecommenderModel(configuration: MLModelConfiguration())
     }
     
     mutating func rate(movie: Movie, rating: Double) {
-        ratings[Int64(movie.id)] = rating
+        ratings[String(movie.id)] = rating
         print(ratings)
     }
     
     func ratingFor(movie: Movie) -> Double? {
-        ratings[Int64(movie.id)]
+        ratings[String(movie.id)]
     }
     
     func recommendMovies(numberOfItems: Int) -> [Movie] {
-        let recommenderInput = MovieRecommenderModelInput(items: ratings, k: Int64(numberOfItems))
+        
+        let recommenderInput = MovieRecommenderModelInput(items: createRecommendationInput(from: ratings), k: Int64(numberOfItems))
         
         print(ratings)
         
@@ -38,6 +46,16 @@ struct RecommendationModel {
         return output?.recommendations.map { movieId in
             movies.first { $0.id == movieId }
         } as! [Movie]
+    }
+    
+    private func createRecommendationInput(from ratings: [String: Double]) -> [Int64: Double] {
+        var newDictionary = [Int64: Double]()
+        
+        ratings.forEach { (key, value) in
+            newDictionary[Int64(key)!] = value
+        }
+        
+        return newDictionary
     }
     
 }

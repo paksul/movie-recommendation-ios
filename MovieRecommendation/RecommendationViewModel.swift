@@ -11,6 +11,12 @@ import Combine
 class RecommendationViewModel: ObservableObject {
     var recommendationModel: RecommendationModel
     
+    var ratings: [String: Double] {
+        get {
+            recommendationModel.ratings
+        }
+    }
+    
     @Published var currentMovie: Movie? {
         didSet {
             if currentMovie?.imdbId != nil {
@@ -34,6 +40,10 @@ class RecommendationViewModel: ObservableObject {
         recommendationModel = RecommendationModel(ratings: [:], movies: MovieDataLoader().loadMovies())
         
         currentMovie = recommendationModel.movies.randomElement()
+    }
+    
+    func getMovie(fromId id: Int64) -> Movie? {
+        recommendationModel.movies.first { $0.id == id }
     }
     
     func nextMovie() {

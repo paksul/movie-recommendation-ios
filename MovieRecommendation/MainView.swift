@@ -39,6 +39,19 @@ struct MainView: View {
                     .foregroundColor(.white)
                     .background(Color(.sRGB, red: 150/225, green: 121/225, blue: 175/225))
                     .cornerRadius(40)
+                
+                NavigationLink(
+                    destination: EditRatingsView(recommendationViewModel: recommendationViewModel).scaledToFit(),
+                    label: {
+                        Text("Edit ratings")
+                            .fontWeight(.semibold)
+                            .font(.title)
+                    })
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .padding()
+                    .foregroundColor(.white)
+                    .background(Color(.sRGB, red: 150/225, green: 121/225, blue: 175/225))
+                    .cornerRadius(40)
             }
             .padding()
         }
